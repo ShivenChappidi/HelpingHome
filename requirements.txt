@@ -1,0 +1,5 @@
+# Python dependencies for HelpingHome project
+
+indistinguishable_from_magic==0.0.2
+opennote>=2.3.3
+
