@@ -1,6 +1,28 @@
+"""
+Opennote API Client - Test/Demo Script
+Loads API key from environment variables for security.
+"""
+
+import os
+from dotenv import load_dotenv
 from opennote import OpennoteClient
 
-client = OpennoteClient(api_key="sk_opennote_c993f3a8-d86e-451c-9b9a-61d658379894")
+# Load environment variables from .env file
+load_dotenv()
 
-response = client.video.create(model="picasso")
-print(response)
+# Get API key from environment variable
+api_key = os.getenv("OPENNOTE_API_KEY")
+
+if not api_key:
+    raise ValueError(
+        "OPENNOTE_API_KEY not found in environment variables. "
+        "Please add it to your .env file."
+    )
+
+# Create client with API key from environment
+client = OpennoteClient(api_key=api_key)
+
+# Example usage
+if __name__ == "__main__":
+    response = client.video.create(model="picasso")
+    print(response)

@@ -20,6 +20,17 @@ pip install -r requirements.txt
 
 ### Environment Variables
 
-Set the following environment variable:
+Create a `.env` file in the project root with your API keys:
+- `ELEVENLABS_API_KEY` - Your ElevenLabs API key for text-to-speech
 - `OPENNOTE_API_KEY` - Your Opennote API key (get from https://www.opennote.com/)
+- `IFMAGIC_API_KEY` - Your Indistinguishable From Magic API key (if needed)
+
+Example `.env` file:
+```
+ELEVENLABS_API_KEY=your_key_here
+OPENNOTE_API_KEY=your_key_here
+IFMAGIC_API_KEY=your_key_here
+```
+
+**Note:** The `.env` file is already in `.gitignore` and will not be committed to git.
 
