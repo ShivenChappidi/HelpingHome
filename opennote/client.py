@@ -2,12 +2,43 @@
 # Handles integration with Opennote for note-taking, journals, and other features
 
 import os
+import sys
 from typing import Optional
 
+# Workaround: Import from installed package, not local directory
+# The local opennote/ directory shadows the installed package, so we clear cache and remove from path
+path_to_remove = None
 try:
+    # Clear any cached opennote module
+    if 'opennote' in sys.modules:
+        del sys.modules['opennote']
+    
+    # Save current directory from path and remove it
+    current_dir = os.getcwd()
+    if current_dir in sys.path:
+        path_to_remove = current_dir
+        sys.path.remove(current_dir)
+    
+    # Also remove script directory if it's different
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    if project_root in sys.path:
+        sys.path.remove(project_root)
+    
+    # Now import from installed package
     from opennote import OpennoteClient
+    
 except ImportError:
     OpennoteClient = None
+finally:
+    # Restore paths if we removed them
+    if path_to_remove:
+        sys.path.insert(0, path_to_remove)
+    if project_root in sys.path or project_root not in [p for p in sys.path]:
+        try:
+            sys.path.insert(0, project_root)
+        except:
+            pass
 
 
 class OpenNoteService:

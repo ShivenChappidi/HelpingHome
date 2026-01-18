@@ -1,0 +1,92 @@
+{
+  "scrambled_eggs": {
+    "name": "Scrambled Eggs",
+    "description": "Simple scrambled eggs recipe",
+    "steps": [
+      "Gather ingredients: 2 eggs, butter, salt, pepper",
+      "Crack eggs into a bowl",
+      "Add salt and pepper, whisk gently",
+      "Heat pan with butter over medium heat",
+      "Pour eggs into pan",
+      "Stir gently until cooked",
+      "Serve on plate"
+    ]
+  },
+  "pasta_basic": {
+    "name": "Basic Pasta",
+    "description": "Simple pasta with sauce",
+    "steps": [
+      "Fill pot with water and bring to boil",
+      "Add pasta to boiling water",
+      "Cook pasta for 8-10 minutes",
+      "Drain pasta in colander",
+      "Heat sauce in separate pan",
+      "Mix pasta with sauce",
+      "Serve in bowl"
+    ]
+  },
+  "grilled_cheese": {
+    "name": "Grilled Cheese Sandwich",
+    "description": "Classic grilled cheese",
+    "steps": [
+      "Gather bread and cheese",
+      "Butter one side of each bread slice",
+      "Place cheese between bread slices",
+      "Heat pan over medium heat",
+      "Cook sandwich 2-3 minutes per side",
+      "Check if golden brown",
+      "Remove from pan and serve"
+    ]
+  },
+  "smoothie": {
+    "name": "Fruit Smoothie",
+    "description": "Healthy fruit smoothie",
+    "steps": [
+      "Gather fruits: banana, berries, yogurt",
+      "Wash fruits if needed",
+      "Cut banana into chunks",
+      "Add fruits to blender",
+      "Add yogurt and ice",
+      "Blend until smooth",
+      "Pour into glass and serve"
+    ]
+  },
+  "salad": {
+    "name": "Simple Salad",
+    "description": "Fresh green salad",
+    "steps": [
+      "Wash lettuce and vegetables",
+      "Dry lettuce with paper towel",
+      "Chop lettuce into bite-sized pieces",
+      "Slice tomatoes and cucumbers",
+      "Add vegetables to bowl",
+      "Add dressing and toss",
+      "Serve in salad bowl"
+    ]
+  },
+  "cookies": {
+    "name": "Cookies",
+    "steps": [
+      "Gather Ingredients",
+      "Put into bowl",
+      "Whisk",
+      "put dough on baking paper in tray",
+      "put in oven",
+      "turn on oven, wait for 30 minutes",
+      "take out of oven with oven mitts, enjoy"
+    ],
+    "description": "Caleb's Favourite Cookies"
+  },
+  "omelettes": {
+    "name": "Omelettes",
+    "steps": [
+      "Gather ingredients",
+      "place in bowl",
+      "whisk",
+      "place in pan",
+      "cook",
+      "enjoy"
+    ],
+    "description": "Caleb's favourite omelettes"
+  }
+}

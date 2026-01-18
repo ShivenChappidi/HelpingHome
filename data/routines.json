@@ -1,0 +1,67 @@
+{
+  "washing_hands": {
+    "name": "Washing Hands",
+    "description": "Complete hand washing routine",
+    "steps": [
+      "Turn on the water and wet your hands",
+      "Apply soap to your hands",
+      "Scrub your hands together for 20 seconds",
+      "Rinse your hands thoroughly with water",
+      "Dry your hands with a towel"
+    ]
+  },
+  "cleaning_bathroom": {
+    "name": "Cleaning the Bathroom",
+    "description": "Complete bathroom cleaning routine",
+    "steps": [
+      "Gather cleaning supplies: spray, sponge, and paper towels",
+      "Spray the sink and counter with cleaning solution",
+      "Wipe down the sink, counter, and mirror",
+      "Clean the toilet with disinfectant",
+      "Sweep or mop the floor and put supplies away"
+    ]
+  },
+  "laundry_large_load": {
+    "name": "Large Load Wash Cycle",
+    "description": "Complete washing machine routine for a large load of clothes",
+    "steps": [
+      "Open the washing machine door",
+      "Load your clothes into the washing machine",
+      "Add high amount of detergent to the detergent dispenser",
+      "Close the washing machine door",
+      "Set the dial to heavy soil level",
+      "Set the temperature to hot water",
+      "Press start on the washing machine"
+    ],
+    "cycle_duration_minutes": 60
+  },
+  "laundry_small_load": {
+    "name": "Small Load Wash Cycle",
+    "description": "Complete washing machine routine for a small load of clothes",
+    "steps": [
+      "Open the washing machine door",
+      "Load your clothes into the washing machine",
+      "Add low amount of detergent to the detergent dispenser",
+      "Close the washing machine door",
+      "Set the dial to light soil level",
+      "Set the temperature to cold water",
+      "Press start on the washing machine"
+    ],
+    "cycle_duration_minutes": 30
+  },
+  "laundry_normal_load": {
+    "name": "Normal Load Wash Cycle",
+    "description": "Complete washing machine routine for a normal load of clothes",
+    "steps": [
+      "Open the washing machine door",
+      "Load your clothes into the washing machine",
+      "Add medium amount of detergent to the detergent dispenser",
+      "Close the washing machine door",
+      "Set the dial to normal soil level",
+      "Set the temperature to warm water",
+      "Press start on the washing machine"
+    ],
+    "cycle_duration_minutes": 45
+  }
+}
+

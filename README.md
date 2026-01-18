@@ -32,5 +32,25 @@ OPENNOTE_API_KEY=your_key_here
 IFMAGIC_API_KEY=your_key_here
 ```
 
+
+## Daily Sensor Data Logging (Automated)
+
+To automatically collect daily sensor data from all rooms and create an OpenNote log:
+
+1. Ensure your `.env` file contains your `OPENNOTE_API_KEY`.
+2. Run the following script at the end of each day (can be automated with Task Scheduler or cron):
+
+	```bash
+	bash run_daily_log.sh
+	```
+
+This will:
+* Aggregate sensor data from all rooms into a CSV in `data/daily_logs/`
+* Use OpenNote to create a daily caretaker log from the CSV
+
+You can schedule this script to run automatically every night.
+
+---
+
 **Note:** The `.env` file is already in `.gitignore` and will not be committed to git.
 

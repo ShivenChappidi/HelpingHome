@@ -15,6 +15,12 @@ except ImportError:
     ELEVENLABS_AVAILABLE = False
     elevenlabs_play = None
 
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
+
 
 # Load environment variables
 load_dotenv()
@@ -48,9 +54,20 @@ class AudioAgent:
             )
         
         self.client = ElevenLabs(api_key=api_key)
-        # Default to a calm, clear voice (Rachel - professional and clear)
-        self.voice_id = voice_id or "21m00Tcm4TlvDq8ikWAM"
+        # Default voice IDs for ElevenLabs:
+        # Australian Woman: "EXAVITQu4vr4xnSDxMaL" (Bella) - female, warm, soothing
+        # American Man: "pNInz6obpgDQGcFmaJgB" (Adam) - male, professional
+        # British Woman: "ThT5KcBeYPX3keUQqHPh" (Domi) - female, clear, articulate
+        # Default to Australian Woman to match API server default
+        self.voice_id = voice_id or "EXAVITQu4vr4xnSDxMaL"  # Australian Woman (Bella) - default
         self.model_id = "eleven_multilingual_v2"  # Multilingual model
+        # Voice settings for more soothing, calm tone
+        self.voice_settings = {
+            "stability": 0.7,  # Higher stability = more consistent, calm delivery
+            "similarity_boost": 0.75,  # Good balance for clarity
+            "style": 0.3,  # Lower style = less variation, more soothing
+            "use_speaker_boost": True  # Enhances clarity
+        }
     
     def speak(self, text: str, voice_id: Optional[str] = None) -> bool:
         """
@@ -69,9 +86,10 @@ class AudioAgent:
             print(f"[DEBUG] Calling ElevenLabs API with text: {text[:50]}...")
             print(f"[DEBUG] Voice ID: {voice}, Model: {self.model_id}")
             audio = self.client.text_to_speech.convert(
-                text=text,
                 voice_id=voice,
+                text=text,
                 model_id=self.model_id,
+                voice_settings=self.voice_settings,
                 output_format="mp3_44100_128"
             )
             print("[DEBUG] API call successful, audio received")
@@ -116,7 +134,7 @@ class AudioAgent:
 _audio_agent: Optional[AudioAgent] = None
 
 
-def get_audio_agent() -> Optional[AudioAgent]:
+def get_audio_agent(voice_id: Optional[str] = None) -> Optional[AudioAgent]:
     """Get or create the global audio agent instance."""
     global _audio_agent
     
@@ -128,11 +146,31 @@ def get_audio_agent() -> Optional[AudioAgent]:
                 print(f"[DEBUG] API key found: {api_key[:10]}...{api_key[-4:]}")
             else:
                 print("[DEBUG] ERROR: No API key found in environment")
-            _audio_agent = AudioAgent()
-            print("[DEBUG] Audio agent initialized successfully")
+            
+            # Try to get voice preference from API server if available
+            default_voice_id = voice_id
+            if not default_voice_id and REQUESTS_AVAILABLE:
+                try:
+                    response = requests.get("http://localhost:5001/api/voice-preference", timeout=0.5)
+                    if response.status_code == 200:
+                        data = response.json()
+                        if data.get("voice_id"):
+                            default_voice_id = data["voice_id"]
+                            print(f"[DEBUG] Loaded voice preference from API: {data.get('voice')}")
+                except Exception:
+                    # API not available or failed, use default
+                    pass
+            
+            _audio_agent = AudioAgent(voice_id=default_voice_id)
+            print(f"[DEBUG] Audio agent initialized successfully with voice_id: {_audio_agent.voice_id}")
         except (ImportError, ValueError) as e:
             print(f"[DEBUG] Could not initialize audio agent: {e}")
             return None
+    
+    # Update voice if provided and different from current
+    if voice_id and _audio_agent and _audio_agent.voice_id != voice_id:
+        _audio_agent.voice_id = voice_id
+        print(f"[DEBUG] Updated audio agent voice_id to: {voice_id}")
     
     return _audio_agent
 

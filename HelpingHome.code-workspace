@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "HelpingHome",
+			"path": "."
+		},
+		{
+			"name": "hh_frontend",
+			"path": "../Downloads/hh_frontend"
+		}
+	],
+	"settings": {}
+}
