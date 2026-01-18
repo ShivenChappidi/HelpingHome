@@ -2,12 +2,33 @@
 # Handles integration with Opennote for note-taking, journals, and other features
 
 import os
+import sys
+import importlib
 from typing import Optional
 
-try:
-    from opennote import OpennoteClient
-except ImportError:
-    OpennoteClient = None
+
+def _load_opennote_client():
+    """
+    Load OpennoteClient from the external package, avoiding the local opennote module shadow.
+    """
+    try:
+        from opennote import OpennoteClient  # type: ignore
+        return OpennoteClient
+    except Exception:
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        removed = False
+        if project_root in sys.path:
+            sys.path.remove(project_root)
+            removed = True
+        try:
+            module = importlib.import_module("opennote")
+            return getattr(module, "OpennoteClient", None)
+        finally:
+            if removed:
+                sys.path.insert(0, project_root)
+
+
+OpennoteClient = _load_opennote_client()
 
 
 class OpenNoteService:
