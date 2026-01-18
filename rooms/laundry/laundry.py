@@ -1,4 +1,3 @@
-# Laundry room module for autism assistance application
 """
 Laundry Room Demo for HelpingHome - Autism Assistance Application
 Fully-automatic state machine with auto-start, finish detection, and reminders.
@@ -533,5 +532,3 @@ def _print_status() -> None:
 
 if __name__ == "__main__":
     run_demo()
-
-
