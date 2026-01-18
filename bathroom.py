@@ -1,3 +1,5 @@
+# Bathroom room module for autism assistance application
+
 """
 Bathroom Module for HelpingHome - Autism Assistance Application
 Focus: Sensory Regulation, Hygiene Sequencing, Safety, and Interoception.
@@ -7,6 +9,8 @@ import time
 import sys
 import os
 import random
+import csv
+from datetime import datetime
 from typing import Dict, Optional, Any
 
 # Add project root to path so imports work when running this file directly
@@ -58,6 +62,28 @@ state = {
 # ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
+
+CSV_LOG_DIR = os.path.join(project_root, "data")
+CSV_LOG_PREFIX = "bathroom_log"
+CSV_COLUMNS = ["timestamp", "event_type", "detail", "value"]
+
+
+def _log_csv(event_type: str, detail: Optional[str] = None, value: Optional[float] = None) -> None:
+    os.makedirs(CSV_LOG_DIR, exist_ok=True)
+    day = datetime.now().strftime("%Y-%m-%d")
+    path = os.path.join(CSV_LOG_DIR, f"{CSV_LOG_PREFIX}_{day}.csv")
+    row = {
+        "timestamp": datetime.now().isoformat(timespec="seconds"),
+        "event_type": event_type,
+        "detail": detail,
+        "value": value,
+    }
+    file_exists = os.path.exists(path)
+    with open(path, "a", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=CSV_COLUMNS, extrasaction="ignore")
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row)
 
 def announce(text: str, led_color: Optional[str] = None):
     """
@@ -111,8 +137,10 @@ def process_sensory(noise_db: float, water_temp: float):
     # 1. Thermal Logic
     if water_temp > TEMP_SCALD_C:
         announce("Warning. The water is very hot. Please be careful.", led_color="RED")
+        _log_csv("water_too_hot", detail="temp_c", value=water_temp)
     elif water_temp < TEMP_COLD_C:
         announce("The water is quite cold.", led_color="BLUE")
+        _log_csv("water_too_cold", detail="temp_c", value=water_temp)
     else:
         # Ideal temperature logic
         if not state["calming_mode"] and not state["is_sitting"]: 
@@ -125,6 +153,7 @@ def process_sensory(noise_db: float, water_temp: float):
             state["calming_mode"] = True
             announce("It is getting loud. Playing calming sounds.", led_color="SOFT_ORANGE")
             print("🎵 [AUDIO SYSTEM] Playing: 'Nature_Sounds.mp3'")
+            _log_csv("noise_alert", detail="db", value=noise_db)
     else:
         if state["calming_mode"]:
             state["calming_mode"] = False
@@ -142,6 +171,7 @@ def process_hygiene(action: str) -> bool:
     if action == "walk" and state["wash_step"] == 0:
         state["wash_step"] = 1
         announce("Hi. Let's wash hands. Turn on the water.", led_color="WHITE")
+        _log_csv("hygiene_start")
         
     elif action == "wave" and state["wash_step"] == 1:
         state["wash_step"] = 2
@@ -162,6 +192,7 @@ def process_hygiene(action: str) -> bool:
         if state["wash_step"] == 4:
             announce("All done. Hands are clean!", led_color="OFF")
             state["wash_step"] = 0
+            _log_csv("hygiene_complete")
             return True # Routine Complete
         elif state["wash_step"] > 0:
             announce("Please come back, we aren't finished yet.", led_color="YELLOW")
@@ -185,6 +216,7 @@ def process_safety(noise_db: float, motion_detected: bool) -> bool:
             state["safety_alert_sent"] = False
             log_caregiver("Safety Alert Resolved: User returned to bathroom.")
             announce("Welcome back.", led_color="GREEN")
+            _log_csv("ghost_tap_resolved")
         return False
 
     # Ghost Tap Check
@@ -201,6 +233,7 @@ def process_safety(noise_db: float, motion_detected: bool) -> bool:
             state["safety_alert_sent"] = True
             announce("Alert. The sink is running but nobody is here.", led_color="FLASHING_RED")
             log_caregiver("ALERT: Ghost Tap Detected (Running water + No Motion).")
+            _log_csv("ghost_tap_alert")
             return True # Alert Triggered
             
     return False
@@ -218,12 +251,14 @@ def process_routine(is_sitting: bool) -> bool:
         state["sit_start_time"] = time.time()
         announce("Timer started.", led_color="SOFT_BLUE")
         log_caregiver("User is using the toilet.")
+        _log_csv("toilet_start")
         
     elif not is_sitting and state["is_sitting"]:
         # STAND UP EVENT
         state["is_sitting"] = False
         announce("Remember to wash your hands.", led_color="GREEN")
         log_caregiver("User finished using the toilet.")
+        _log_csv("toilet_end")
         return True # Routine Complete
 
     # DURATION CHECK
