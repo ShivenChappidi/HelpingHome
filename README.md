@@ -7,7 +7,6 @@ An application to assist people with autism in living independently using Indist
 - `rooms/` - Room-specific modules (kitchen, laundry, bathroom)
 - `opennote/` - Opennote API integration for note-taking and journals
 - `utils/` - Shared utilities and common functions
-- `config/` - Configuration files
 
 ## Setup
 
